@@ -1,0 +1,31 @@
+ know this reply is a little late, but could work for someone else in the future.
+
+So this solution isn't just specific to Twenty Sixteen, but I believe it could work for any theme (I'm not an expert in theme development, so I apologize in advance if this doesn't work some of you, it worked for me):
+
+<!-----Put this code in Function.php---->
+
+function themeslug_theme_customizer( $wp_customize ) {
+$wp_customize->add_section( 'themeslug_logo_section' , array(
+'title' => __( 'Logo', 'themeslug' ),
+'priority' => 30,
+'description' => 'Upload a logo to replace the default site name and description in the header',
+) );
+$wp_customize->add_setting( 'themeslug_logo' );
+$wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'themeslug_logo', array(
+'label' => __( 'Logo', 'themeslug' ),
+'section' => 'themeslug_logo_section',
+'settings' => 'themeslug_logo',
+) ) );
+}
+add_action('customize_register', 'themeslug_theme_customizer');
+
+<!------And put this code where you want to display the logo (for instance, I put it in header.php before the main menu)-------->
+
+<?php if ( get_theme_mod( 'themeslug_logo' ) ) : ?>
+<div class='site-logo'>
+<img src='<?php echo esc_url( get_theme_mod( 'themeslug_logo' ) ); ?>' alt='<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>'>
+</div>
+<?php endif; ?>
+<!---------------End of code------------>
+
+You'll have to go to Appearance / Customize to add/change the logo image. Hope this helps! :) 
